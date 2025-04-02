@@ -1,0 +1,13 @@
+# crag-weather-recommender  
+**Proof of concept for recommending climbing sectors in the Basque Country using web scraping and weather-based machine learning**  
+
+## Project Overview
+This personal project (completed in 2022) showcases a full pipeline of web data scraping and machine learning to solve a real-world problem in rock climbing. The initial goal was to predict the difficulty grade of new climbing routes from existing data. However, this proved infeasible due to limited and subjective grading data. The project ended being a recommendation tool that suggests *climbing sectors* based on weather conditions and desired difficulty grades. The outcome is a proof-of-concept system that demonstrates skills in web scraping, API integration, and predictive modeling.
+
+## Data Collection: Web Scraping theCrag
+
+The project uses Python (Requests + BeautifulSoup) to crawl the [theCrag](https://www.thecrag.com/) website for all climbing routes in the Basque Country region. A custom crawler starts from the main Basque region page and recursively traverses every area and sub-area, collecting the name and difficulty grade of each climbing route. The scraper follows the site’s structure (similar to a breadth-first search), issuing HTTP GET requests and parsing the HTML responses to find route listings. All extracted routes and their grades are stored in a CSV file (`vias.csv`) for later analysis. If you know spanish it is worth it to see the names of the routes, there are very funny. 
+
+## Weather Data & Rain Prediction Model
+
+To incorporate weather conditions, the project pulled historical weather data for Donostia (San Sebastián) throughout 2022 using the World Weather Online API. Hourly observations (in 3-hour intervals) for the entire year were retrieved in JSON format, totaling nearly 3,000 data points. Relevant features such as temperature, humidity, wind speed, and cloud cover were extracted and compiled into a dataset (`weather2022disc.csv`). The precipitation measure was discretized to a binary label (rain vs. no rain) to enable classification. After normalizing the feature data and splitting into training/test sets (80/20), a Gaussian Naive Bayes classifier was trained to predict the probability of rain at a given time. The resulting model achieved about 89% accuracy in predicting rainfall on the test set, indicating it learned the weather patterns fairly well. (The dataset was stored to be used in later data mining courses).
